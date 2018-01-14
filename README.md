@@ -6,6 +6,7 @@ The purpose of this program is to create a MS Paint Clone.  I would like to incl
       - Marker (Circle)
  * Draw Circle, Rectangle, Line
  * Set Color 
+ * Color picker
  * Save / Load image
  
  # Version History
