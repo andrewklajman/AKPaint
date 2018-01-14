@@ -11,6 +11,6 @@ The purpose of this program is to create a MS Paint Clone.  I would like to incl
  
  # Version History
  v0.1 - Paint with Marker (Settings within program)
-      
+ v0.2 - Beginning to add the tool bar icons (starting with size)  
       
       
