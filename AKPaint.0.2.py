@@ -6,10 +6,13 @@ BLACK = (0,0,0)
 RED = (255,0,0)
 GRAY = (100,100,100)
 TB_HEIGHT = 25
-TB_ICONSIZE = (22,22)
+TB_ICONSIZE = (25,25)
 
 ICN_BGND = WHITE
 ICN_OTRBRDR = GRAY
+MARKER = 'marker'
+FELT = 'felt tip pen'
+cur_tool = MARKER
 
 SML = 1
 MED = 5
@@ -17,7 +20,6 @@ LRG = 10
 mPos = 0
 mBtn = 0
 cur_size = SML
-
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -44,50 +46,52 @@ def draw_pen(size, color):
         pygame.draw.circle(paintSurf,color,mPosPaint,size)
 
 def initVariables():
-    global mPos, mBtn, mPosPaint
+    global mPos, mBtn, mBtnPrv, mPosPaint
     mPos = pygame.mouse.get_pos()
     mPosPaint = (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1] - TB_HEIGHT)
+    mBtnPrv = mBtn
     mBtn = (pygame.mouse.get_pressed()[0] == 1)
 
-def populateToolBar():
-    font = pygame.font.SysFont('comicsansms', 20)
-    text = font.render('+', True, (BLACK))
-    icons = [text]
-    toolSurf.blit(text,(0,0))
+def populateToolbar():
+    toolbar = ['S','M','L','M','F']
+    [toolSurf.blit(icon(toolbar[n],25),(n * TB_ICONSIZE[0],0)) for n in range(len(toolbar))]
 
-def icon():
-    font = pygame.font.SysFont('Calibri', 33)
+def icon(text, font_size):
     icn = pygame.Surface(TB_ICONSIZE)
     icn.fill(ICN_BGND)
-    pygame.draw.rect(icn,ICN_OTRBRDR,(0,0,TB_ICONSIZE[0],TB_ICONSIZE[1]),1)
+    txtSurf = pygame.font.SysFont('Consolas', font_size).render(text, True, (BLACK))
+    icn.blit(txtSurf, ((TB_ICONSIZE[0] - txtSurf.get_size()[0])/2, (TB_ICONSIZE[1] - txtSurf.get_size()[1])/2))
+    return icn
 
-    text = font.render('+', True, (BLACK))
-    hgtAdj = int((text.get_size()[1] - TB_ICONSIZE[1]) / -2)
-    icn.blit(text,(0,+hgtAdj))
+def tbSetting():
+    global cur_size, cur_tool
+    tbPos = (int(mPos[0]/TB_ICONSIZE[0]),int(mPos[1]/TB_ICONSIZE[1]))
+    if mBtn and not(mBtnPrv) and tbPos[1] == 0:
+        if tbPos[0] == 0:
+            cur_size = SML
+        if tbPos[0] == 1:
+            cur_size = MED
+        if tbPos[0] == 2:
+            cur_size = LRG
+        if tbPos[0] == 3:
+            cur_tool = MARKER
+        if tbPos[0] == 4:
+            cur_tool = FELT
 
-    paintSurf.blit(icn,(100,100))
-
-
-    pygame.draw.rect(paintSurf,ICN_OTRBRDR,(200,200,TB_ICONSIZE[0],TB_ICONSIZE[1]),1)
-    paintSurf.blit(text,(200,200+hgtAdj))
-
-
-
-
-##
-##
-##
-##    paintSurf.blit(text,(100,100))
-##    pygame.draw.rect(paintSurf,ICN_OTRBRDR,(100,100,text.get_size()[0],text.get_size()[1]),1)
-##    print(text.get_size())
+def tlSelection():
+    if mBtn and cur_tool == MARKER:
+        draw_pen(cur_size, BLACK)
+    if mBtn and cur_tool == FELT:
+        pygame.draw.line(paintSurf,BLACK,mPosPaint,(mPosPaint[0] - 5,mPosPaint[1] - 10),cur_size)
     
-icon()
+
+populateToolbar()
 while True:
     checkQuit()
     initVariables()
+    tbSetting()
+    tlSelection()
     updateScreen()
-
-    if mBtn:
-        draw_pen(LRG, BLACK)
+    clock.tick(120)
 
             
