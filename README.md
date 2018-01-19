@@ -8,6 +8,8 @@ The purpose of this program is to create a MS Paint Clone.  I would like to incl
  * Set Color 
  * Color picker
  * Save / Load image
+  
+ 20180119 - Circle is created... I consider this done!
  
  # Version History
   - v0.1 - Paint with Marker (Settings within program)
@@ -15,5 +17,6 @@ The purpose of this program is to create a MS Paint Clone.  I would like to incl
   - v0.3 - Size Marker and Felt icons are now set and working.
   - v0.4 - Added color
   - v0.5 - Added Line function
+  - v0.6 - Circle is created
       
       
